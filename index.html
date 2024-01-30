@@ -5,6 +5,31 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebRTC Demo</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap");
+
+      body {
+        font-family: "Syne Mono", monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin: 80px 10px;
+      }
+
+      video {
+        width: 40vw;
+        height: 30vw;
+        margin: 2rem;
+        background: #2c3e50;
+      }
+
+      .videos {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body>
     <h2>1. Start your Webcam</h2>
@@ -17,8 +42,6 @@
         <h3>Remote Stream</h3>
         <video id="remoteVideo" autoplay playsinline></video>
       </span>
-
-
     </div>
 
     <button id="webcamButton">Start webcam</button>
@@ -27,7 +50,7 @@
 
     <h2>3. Join a Call</h2>
     <p>Answer the call from a different browser window or device</p>
-    
+
     <input id="callInput" />
     <button id="answerButton" disabled>Answer</button>
 
@@ -36,6 +59,5 @@
     <button id="hangupButton" disabled>Hangup</button>
 
     <script type="module" src="/main.js"></script>
-
   </body>
 </html>
