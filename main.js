@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD2-ZqeVqJmDEWS05I8LUzmFhvmZaYroHg",
@@ -15,15 +16,16 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const firestore = firebase.firestore();
-// const database = firebase.database()
-// console.log('database is ', database)
+const database = firebase.database()
 
-// const roomsRef = ref(db, 'rooms/' );
-// onValue(roomsRef, (snapshot) => {
-//   const data = snapshot.val();
-//   // updateStarCount(postElement, data);
-//   console.log('data is ', data)
-// });
+
+var roomsRef = database.ref('rooms/');
+roomsRef.on('value', (snapshot) => {
+  const data = snapshot.val();
+  console.log('data is ', data)
+});
+
+
 
 const servers = {
   iceServers: [
@@ -74,54 +76,6 @@ webcamButton.onclick = async () => {
   webcamButton.disabled = true;
 };
 
-// 2. Create an offer
-// callButton.onclick = async () => {
-//   // Reference Firestore collections for signaling
-//   const callDoc = firestore.collection('calls').doc();
-//   const offerCandidates = callDoc.collection('offerCandidates');
-//   const answerCandidates = callDoc.collection('answerCandidates');
-
-//   console.log(callDoc, offerCandidates, answerCandidates)
-
-//   callInput.value = callDoc.id;
-
-//   // Get candidates for caller, save to db
-//   pc.onicecandidate = (event) => {
-//     event.candidate && offerCandidates.add(event.candidate.toJSON());
-//   };
-
-//   // Create offer
-//   const offerDescription = await pc.createOffer();
-//   await pc.setLocalDescription(offerDescription);
-
-//   const offer = {
-//     sdp: offerDescription.sdp,
-//     type: offerDescription.type,
-//   };
-
-//   await callDoc.set({ offer });
-
-//   // Listen for remote answer
-//   callDoc.onSnapshot((snapshot) => {
-//     const data = snapshot.data();
-//     if (!pc.currentRemoteDescription && data?.answer) {
-//       const answerDescription = new RTCSessionDescription(data.answer);
-//       pc.setRemoteDescription(answerDescription);
-//     }
-//   });
-
-//   // When answered, add candidate to peer connection
-//   answerCandidates.onSnapshot((snapshot) => {
-//     snapshot.docChanges().forEach((change) => {
-//       if (change.type === 'added') {
-//         const candidate = new RTCIceCandidate(change.doc.data());
-//         pc.addIceCandidate(candidate);
-//       }
-//     });
-//   });
-
-//   hangupButton.disabled = false;
-// };
 callButton.onclick = async () => {
 
 
@@ -133,6 +87,7 @@ callButton.onclick = async () => {
   console.log(callDoc, offerCandidates, answerCandidates)
 
   callInput.value = callDoc.id;
+  firebase.database().ref('rooms/').set([callDoc.id]);
 
   // Get candidates for caller, save to db
   pc.onicecandidate = (event) => {
